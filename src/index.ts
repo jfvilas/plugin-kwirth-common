@@ -17,12 +17,12 @@ import { Entity } from '@backstage/catalog-model';
 export * from './Resources';
 
 /**
- * Kubelog annotation.
+ * Kwirth annotation.
  */
 export const ANNOTATION_KWIRTH_LOCATION = 'backstage.io/kubernetes-id';
 
 /**
- * Function to know if an entity has Kubelog.
+ * Function to know if an entity has Kwirth.
  */
 export const isKwirthAvailable = (entity: Entity) => {
   if (!entity.metadata.annotations) return false;
