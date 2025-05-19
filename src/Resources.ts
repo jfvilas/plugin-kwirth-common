@@ -28,6 +28,13 @@ export interface PodData {
     containers: string[]
 }
 
+export interface MetricDefinition {
+    metric: string
+    help: string
+    type: string
+    eval: string
+}
+
 /**
  * @interface ClusterValidPods contains data about a cluster and all the pods found in the cluster that match required access
  * @field name is the name of the cluster
@@ -37,8 +44,9 @@ export interface PodData {
  */
 export interface ClusterValidPods {
     name: string
+    metrics?: MetricDefinition[]
     url: string
     title?: string
     data: PodData[]
-    accessKeys : Map<InstanceConfigScopeEnum,AccessKey>
+    accessKeys: Map<InstanceConfigScopeEnum,AccessKey>
 }

@@ -15,6 +15,8 @@ limitations under the License.
 */
 import { Entity } from '@backstage/catalog-model';
 export * from './Resources';
+export * from './InterfacesFront';
+export * from './Tools';
 
 /**
  * Kwirth annotation.
