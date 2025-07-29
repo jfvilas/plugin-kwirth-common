@@ -1,6 +1,6 @@
 {
   "name": "@jfvilas/plugin-kwirth-common",
-  "version": "0.12.5",
+  "version": "0.12.6",
   "description": "Common functionalities for the Backstage Kwirth plugins",
   "keywords": [
     "Backstage",
