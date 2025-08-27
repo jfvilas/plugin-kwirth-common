@@ -13,20 +13,21 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-import { Entity } from '@backstage/catalog-model';
-export * from './Resources';
-export * from './InterfacesFront';
-export * from './Tools';
+import { Entity } from '@backstage/catalog-model'
+export * from './Resources'
+export * from './InterfacesFront'
+export * from './Tools'
 
 /**
  * Kwirth annotation.
  */
-export const ANNOTATION_KWIRTH_LOCATION = 'backstage.io/kubernetes-id';
+export const ANNOTATION_BACKSTAGE_KUBERNETES_LABELID = 'backstage.io/kubernetes-id'
+export const ANNOTATION_BACKSTAGE_KUBERNETES_LABELSELECTOR = 'backstage.io/kubernetes-label-selector'
 
 /**
  * Function to know if an entity has Kwirth.
  */
 export const isKwirthAvailable = (entity: Entity) => {
   if (!entity.metadata.annotations) return false;
-  return Boolean (entity.metadata.annotations[ANNOTATION_KWIRTH_LOCATION]);
+  return Boolean (entity.metadata.annotations[ANNOTATION_BACKSTAGE_KUBERNETES_LABELID]) || Boolean (entity.metadata.annotations[ANNOTATION_BACKSTAGE_KUBERNETES_LABELSELECTOR]);
 }
