@@ -8,8 +8,10 @@ export const getVersion = async (discoveryApi:DiscoveryApi, fetchApi:FetchApi) :
         const baseUrl = await discoveryApi.getBaseUrl('kwirth')
         const targetUrl = `${baseUrl}/version`
 
+        console.log(targetUrl)
         const result = await fetchApi.fetch(targetUrl)
         const data = await result.json()
+        console.log(data)
 
         if (!result.ok) {
             throw new Error(`getVersion error: not ok`)
@@ -18,6 +20,24 @@ export const getVersion = async (discoveryApi:DiscoveryApi, fetchApi:FetchApi) :
     }
     catch (err) {
         throw new Error(`getVersion error: ${err}`)
+    }
+}
+
+export const getInfo = async (discoveryApi:DiscoveryApi, fetchApi:FetchApi) : Promise<string> => {
+    try {
+        const baseUrl = await discoveryApi.getBaseUrl('kwirth')
+        const targetUrl = `${baseUrl}/info`
+
+        const result = await fetchApi.fetch(targetUrl)
+        const data = await result.json()
+
+        if (!result.ok) {
+            throw new Error(`getInfo error: not ok`)
+        }
+        return data
+    }
+    catch (err) {
+        throw new Error(`getInfo error: ${err}`)
     }
 }
 
