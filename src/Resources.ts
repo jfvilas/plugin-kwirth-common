@@ -22,13 +22,19 @@ import { AccessKey, InstanceConfigScopeEnum } from '@jfvilas/kwirth-common'
  * @field namespace, the namespace of the pod
  * @field accessKeys, a Map with a service scope as key (STREAM, VIEW, RESTART...) and an access key as value
  */
-
 export interface PodData {
     name: string
     namespace: string
     containers: string[]
 }
 
+/**
+ * @interface MetricDefinition contains data about a specific metric
+ * @field metric, the name of the metric
+ * @field help, text explaiining what this metric is used for
+ * @field type, type of metric (gauge, istogram...)
+ * @field eval, expressions to preprocess metric befor its use
+ */
 export interface MetricDefinition {
     metric: string
     help: string
@@ -48,6 +54,6 @@ export interface ClusterValidPods {
     metrics?: MetricDefinition[]
     url: string
     title?: string
-    data: PodData[]
+    pods: PodData[]
     accessKeys: Map<InstanceConfigScopeEnum,AccessKey>
 }

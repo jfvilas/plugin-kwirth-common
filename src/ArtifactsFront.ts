@@ -1,17 +1,54 @@
-import { Entity } from '@backstage/catalog-model/index'
+import { Entity } from '@backstage/catalog-model'
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api'
 import { InstanceConfigScopeEnum } from '@jfvilas/kwirth-common'
 import { ClusterValidPods } from './Resources'
+import { InstanceMessageTypeEnum, SignalMessageLevelEnum } from "@jfvilas/kwirth-common"
+import { PodData } from "./Resources"
+
+export interface ILogLine {
+    namespace: string
+    pod: string
+    container: string
+    timestamp?: Date
+    type: string
+    text: string
+}
+
+export interface IStatusLine {
+    type: InstanceMessageTypeEnum
+    level: SignalMessageLevelEnum
+    text: string
+}
+
+export interface IBackendInfo {
+    "plugin-kwirth-backend" : string
+    "plugin-kwirth-log" : string
+    "plugin-kwirth-metrics" : string
+    "kwirth" : string
+}
+
+export const getPodList = (pods:PodData[], selectedNamespaces:string[]) => {
+    return Array.from(pods.filter(m => selectedNamespaces.includes(m.namespace)))
+}
+
+export const getContainerList = (pods:PodData[], selectedNamespaces:string[], selectedPodNames:string[]) => {
+    if (selectedNamespaces.length===0 || selectedPodNames.length===0) return []
+    let validpods = pods.filter(pod => selectedNamespaces.includes(pod.namespace))
+    validpods = validpods.filter(p => selectedPodNames.includes(p.name))
+    let validcontainers:string[] = []
+    for (var p of validpods) {
+        validcontainers.push ( ...p.containers )
+    }
+    return Array.from(new Set(validcontainers))
+}
 
 export const getVersion = async (discoveryApi:DiscoveryApi, fetchApi:FetchApi) : Promise<string> => {
     try {
         const baseUrl = await discoveryApi.getBaseUrl('kwirth')
         const targetUrl = `${baseUrl}/version`
 
-        console.log(targetUrl)
         const result = await fetchApi.fetch(targetUrl)
         const data = await result.json()
-        console.log(data)
 
         if (!result.ok) {
             throw new Error(`getVersion error: not ok`)
@@ -23,7 +60,7 @@ export const getVersion = async (discoveryApi:DiscoveryApi, fetchApi:FetchApi) :
     }
 }
 
-export const getInfo = async (discoveryApi:DiscoveryApi, fetchApi:FetchApi) : Promise<string> => {
+export const getInfo = async (discoveryApi:DiscoveryApi, fetchApi:FetchApi) : Promise<IBackendInfo> => {
     try {
         const baseUrl = await discoveryApi.getBaseUrl('kwirth')
         const targetUrl = `${baseUrl}/info`
