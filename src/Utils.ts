@@ -1,6 +1,5 @@
 import { Entity } from '@backstage/catalog-model'
 import { DiscoveryApi, FetchApi } from '@backstage/core-plugin-api'
-import { InstanceConfigScopeEnum } from '@jfvilas/kwirth-common'
 import { ClusterValidPods } from './Resources'
 import { InstanceMessageTypeEnum, SignalMessageLevelEnum } from "@jfvilas/kwirth-common"
 import { PodData } from "./Resources"
@@ -31,13 +30,15 @@ export const getPodList = (pods:PodData[], selectedNamespaces:string[]) => {
     return Array.from(pods.filter(m => selectedNamespaces.includes(m.namespace)))
 }
 
-export const getContainerList = (pods:PodData[], selectedNamespaces:string[], selectedPodNames:string[]) => {
+export const getContainerList = (pods:PodData[], selectedNamespaces:string[], selectedPodNames:string[], excludeContainers:string[]) => {
     if (selectedNamespaces.length===0 || selectedPodNames.length===0) return []
     let validpods = pods.filter(pod => selectedNamespaces.includes(pod.namespace))
     validpods = validpods.filter(p => selectedPodNames.includes(p.name))
     let validcontainers:string[] = []
     for (var p of validpods) {
-        validcontainers.push ( ...p.containers )
+        for (let cname of p.containers) {
+            if (!excludeContainers.includes(cname)) validcontainers.push(cname)
+        }
     }
     return Array.from(new Set(validcontainers))
 }
@@ -97,7 +98,7 @@ export const getResources = async (discoveryApi:DiscoveryApi, fetchApi: FetchApi
     }
 }
 
-export const requestAccess = async (discoveryApi:DiscoveryApi, fetchApi:FetchApi, entity:Entity, channel:string, scopes:InstanceConfigScopeEnum[]): Promise<ClusterValidPods[]> => {
+export const requestAccess = async (discoveryApi:DiscoveryApi, fetchApi:FetchApi, entity:Entity, channel:string, scopes:string[]): Promise<ClusterValidPods[]> => {
     try {
         const baseUrl = await discoveryApi.getBaseUrl('kwirth')
         var targetUrl:URL = new URL (`${baseUrl}/access`)

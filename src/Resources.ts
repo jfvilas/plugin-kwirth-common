@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-import { AccessKey, InstanceConfigScopeEnum } from '@jfvilas/kwirth-common'
+import { AccessKey } from '@jfvilas/kwirth-common'
 
 /**
  * @interface PodData contains data related on oaccessing one pod for doing someting
@@ -55,5 +55,5 @@ export interface ClusterValidPods {
     url: string
     title?: string
     pods: PodData[]
-    accessKeys: Map<InstanceConfigScopeEnum,AccessKey>
+    accessKeys: Map<string,AccessKey>
 }
